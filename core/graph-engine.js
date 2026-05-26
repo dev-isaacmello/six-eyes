@@ -25,6 +25,16 @@ function extractImportsForLanguage(filePath, content) {
     return imports;
   }
 
+  if (ext === ".dart") {
+    const imports = [
+      ...content.matchAll(/^\s*import\s+['"]([^'"]+)['"]/gm),
+      ...content.matchAll(/^\s*export\s+['"]([^'"]+)['"]/gm),
+      ...content.matchAll(/^\s*part\s+['"]([^'"]+)['"]/gm),
+    ].map((match) => match[1]);
+
+    return imports;
+  }
+
   if (ext === ".cs") {
     const imports = [...content.matchAll(/^\s*using\s+([\w\.]+)/gm)].map(
       (match) => match[1],
@@ -55,6 +65,29 @@ function resolveRelativeImport(originFile, specifier) {
     `${targetBase}/index.js`,
     `${targetBase}/index.ts`,
     `${targetBase}/index.tsx`,
+  ];
+}
+
+function resolveDartImport(specifier) {
+  if (specifier.startsWith("dart:")) {
+    return null;
+  }
+
+  if (!specifier.startsWith("package:")) {
+    return null;
+  }
+
+  const packagePath = specifier.replace(/^package:[^/]+\//, "");
+  if (!packagePath) {
+    return null;
+  }
+
+  const normalized = packagePath.replace(/^\//, "");
+  return [
+    `lib/${normalized}`,
+    `lib/${normalized}.dart`,
+    normalized,
+    `${normalized}.dart`,
   ];
 }
 
@@ -171,6 +204,11 @@ export async function generateDependencyGraph(workspacePath) {
     const imports = extractImportsForLanguage(file.relPath, content);
 
     const resolved = imports.flatMap((specifier) => {
+      const dartCandidates = resolveDartImport(specifier);
+      if (dartCandidates) {
+        return dartCandidates.filter((candidate) => knownFiles.has(candidate));
+      }
+
       const relativeCandidates = resolveRelativeImport(file.relPath, specifier);
       if (!relativeCandidates) {
         return [];

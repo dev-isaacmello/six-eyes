@@ -12,7 +12,9 @@ export const MAP_FILES = {
 
 export const SOURCE_GLOBS = [
   "**/*.{js,jsx,ts,tsx,mjs,cjs,py,cs,java,go,rs,rb,php}",
+  "**/*.dart",
   "**/package.json",
+  "**/pubspec.yaml",
   "**/pyproject.toml",
   "**/requirements.txt",
   "**/*.csproj",
@@ -24,6 +26,8 @@ export const SOURCE_GLOBS = [
 export const DEFAULT_IGNORES = [
   "**/node_modules/**",
   "**/.git/**",
+  "**/.dart_tool/**",
+  "**/.fvm/**",
   "**/dist/**",
   "**/build/**",
   "**/.next/**",
@@ -45,6 +49,7 @@ export const LAYER_HINTS = {
     "repository",
     "gateway",
     "persistence",
+    "data",
   ],
   presentation: [
     "presentation",
@@ -54,6 +59,13 @@ export const LAYER_HINTS = {
     "ui",
     "view",
     "page",
+    "screen",
+    "screens",
+    "widget",
+    "widgets",
+    "bloc",
+    "cubit",
+    "provider",
   ],
 };
 
@@ -70,6 +82,14 @@ export const ARCHITECTURE_PATTERNS = {
     markers: ["features", "commands", "queries"],
     threshold: 2,
   },
+  "Feature-first Flutter": {
+    markers: ["features", "screens", "widgets", "bloc", "cubit", "provider"],
+    threshold: 2,
+  },
+  "Flutter App": {
+    markers: ["flutter", "main"],
+    threshold: 2,
+  },
   DDD: {
     markers: [
       "aggregate",
@@ -83,6 +103,16 @@ export const ARCHITECTURE_PATTERNS = {
 };
 
 export const FRAMEWORK_SIGNALS = {
+  Flutter: {
+    anchors: ["pubspec.yaml", "lib/main.dart", "main.dart"],
+    code: ["package:flutter/", "flutter/material.dart", "flutter/widgets.dart"],
+    packages: ["flutter"],
+  },
+  Dart: {
+    anchors: ["pubspec.yaml", "main.dart"],
+    code: ["import 'dart:", 'import \"dart:'],
+    packages: ["dart"],
+  },
   "Next.js": {
     anchors: [
       "next.config.js",

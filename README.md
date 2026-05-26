@@ -8,7 +8,7 @@ Runtime-aware Cognitive Constraint Shaping for AI coding agents.
 
 Six Eyes provides a lightweight cognitive runtime that helps agents reason with architectural context before code generation.
 
-- semantic project scanning
+- semantic project scanning across JS/TS, Python, Dart/Flutter, and other supported stacks
 - dependency intelligence (cycles, hotspots, layer violations)
 - incremental indexing with persisted cognitive maps
 - adaptive context ranking for token efficiency
@@ -79,7 +79,7 @@ These maps support incremental cognition and change-impact awareness.
 
 ## Cognitive Constraint Shaping Flow
 
-1. `scan` infers framework + architecture + domain boundaries.
+1. `scan` infers framework + architecture + domain boundaries, including Dart/Flutter workspaces.
 2. `graph` detects coupling risks (cycles, hotspots, boundary leaks).
 3. `context` ranks files by impact and relevance.
 4. `review` combines all layers into one deterministic pass.

@@ -6,6 +6,47 @@ import {
 import { readFileText, scanWorkspace } from "./scanner-engine.js";
 import { generateDependencyGraph } from "./graph-engine.js";
 
+function extractPubspecDependencies(text) {
+  const packages = new Set();
+  const lines = text.split(/\r?\n/);
+  let activeSection = null;
+  let sectionIndent = 0;
+
+  for (const rawLine of lines) {
+    const trimmed = rawLine.trim();
+
+    if (!trimmed || trimmed.startsWith("#")) {
+      continue;
+    }
+
+    const sectionMatch = rawLine.match(
+      /^([ \t]*)(dependencies|dev_dependencies|dependency_overrides):\s*$/,
+    );
+    if (sectionMatch) {
+      activeSection = sectionMatch[2];
+      sectionIndent = sectionMatch[1].length;
+      continue;
+    }
+
+    if (!activeSection) {
+      continue;
+    }
+
+    const indent = rawLine.match(/^[ \t]*/)?.[0].length ?? 0;
+    if (indent <= sectionIndent) {
+      activeSection = null;
+      continue;
+    }
+
+    const packageMatch = trimmed.match(/^([A-Za-z0-9_.-]+):\s*$/);
+    if (packageMatch) {
+      packages.add(packageMatch[1].toLowerCase());
+    }
+  }
+
+  return packages;
+}
+
 function scoreFramework(rules, evidence) {
   const anchors = rules.anchors ?? [];
   const code = rules.code ?? [];
@@ -246,8 +287,26 @@ export async function analyzeProject(workspacePath) {
     }
   }
 
+  const pubspecFiles = scan.files.filter((f) =>
+    f.relPath.endsWith("pubspec.yaml"),
+  );
+  for (const pubspecFile of pubspecFiles) {
+    const text = await readFileText(workspacePath, pubspecFile.relPath);
+    for (const depName of extractPubspecDependencies(text)) {
+      evidence.packages.add(depName);
+      if (depName === "flutter" || depName === "flutter_test") {
+        tokenEvidence.add("flutter");
+        markerPathEvidence.add("flutter");
+      }
+    }
+  }
+
   for (const file of scan.files) {
     evidence.anchors.add(file.relPath.toLowerCase());
+    if (file.relPath.toLowerCase().endsWith(".dart")) {
+      evidence.anchors.add("dart");
+      tokenEvidence.add("dart");
+    }
     const text = await readFileText(workspacePath, file.relPath);
     const lowered = text.toLowerCase();
 
@@ -261,6 +320,7 @@ export async function analyzeProject(workspacePath) {
       "features",
       "commands",
       "queries",
+      "main",
     ]) {
       if (pathLower.includes(marker)) {
         markerPathEvidence.add(marker);
@@ -288,6 +348,7 @@ export async function analyzeProject(workspacePath) {
       "bounded context",
       "ports",
       "adapters",
+      "main",
     ]) {
       if (lowered.includes(marker)) {
         tokenEvidence.add(marker);
@@ -302,6 +363,20 @@ export async function analyzeProject(workspacePath) {
     tokenEvidence,
     markerPathEvidence,
   );
+  const hasDartFiles = scan.files.some((file) =>
+    file.relPath.endsWith(".dart"),
+  );
+  const hasPubspec = scan.files.some((file) =>
+    file.relPath.endsWith("pubspec.yaml"),
+  );
+
+  if (!architectures.length && hasDartFiles && hasPubspec) {
+    architectures.push({
+      name: "Dart Package",
+      confidence: 0.6,
+      evidence: ["marker:dart", "marker:pubspec"],
+    });
+  }
   const domainMap = buildDomainMap(scan);
 
   const cognitionScore = computeCognitionScore({
