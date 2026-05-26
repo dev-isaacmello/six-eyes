@@ -1,0 +1,60 @@
+{
+  "name": "six-eyes",
+  "version": "1.1.0",
+  "description": "Runtime-aware cognitive constraint shaping for AI coding agents",
+  "type": "module",
+  "bin": {
+    "six-eyes": "./bin/six-eyes.js"
+  },
+  "scripts": {
+    "start": "node bin/six-eyes.js",
+    "dev": "node bin/six-eyes.js review",
+    "init": "node bin/six-eyes.js init --provider claude",
+    "install:skill": "node install.js --provider claude",
+    "scan": "node bin/six-eyes.js scan",
+    "graph": "node bin/six-eyes.js graph",
+    "review": "node bin/six-eyes.js review",
+    "context": "node bin/six-eyes.js context",
+    "maps": "node bin/six-eyes.js maps",
+    "publish:npm": "npm publish --access public"
+  },
+  "files": [
+    "bin",
+    "core",
+    "providers",
+    "skills",
+    "templates",
+    "install.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "exports": {
+    ".": "./install.js",
+    "./core/*": "./core/*.js"
+  },
+  "keywords": [
+    "claude-code",
+    "cursor",
+    "openai",
+    "codex",
+    "langgraph",
+    "langchain",
+    "ai-agents",
+    "architecture",
+    "cognition",
+    "cognitive-constraint-shaping",
+    "software-engineering",
+    "llm",
+    "code-analysis"
+  ],
+  "author": "Isaac Mello | Full Stack Software Engineer",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "fast-glob": "^3.3.3",
+    "fs-extra": "^11.3.0"
+  }
+}
