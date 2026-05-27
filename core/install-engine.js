@@ -10,8 +10,12 @@ const __dirname = path.dirname(__filename);
 const PACKAGE_ROOT = path.resolve(__dirname, "..");
 
 const SKILL_SOURCE = path.join(PACKAGE_ROOT, "skills", "six-eyes");
+const OPERATIONAL_SKILLS_SOURCE = path.join(PACKAGE_ROOT, "skills");
 const TEMPLATE_SOURCE = path.join(PACKAGE_ROOT, "templates");
 const PROVIDER_SOURCE = path.join(PACKAGE_ROOT, "providers");
+const PROTOCOL_SOURCE = path.join(PACKAGE_ROOT, "protocols");
+const CONTRACT_SOURCE = path.join(PACKAGE_ROOT, "contracts");
+const DOC_SOURCE = path.join(PACKAGE_ROOT, "docs");
 
 export async function runInstall({
   provider,
@@ -49,6 +53,38 @@ export async function runInstall({
       recursive: true,
     },
   );
+
+  await fs.copy(
+    OPERATIONAL_SKILLS_SOURCE,
+    path.join(targetProvider.targetDir, "skills"),
+    {
+      overwrite: true,
+      recursive: true,
+    },
+  );
+
+  await fs.copy(
+    PROTOCOL_SOURCE,
+    path.join(targetProvider.targetDir, "protocols"),
+    {
+      overwrite: true,
+      recursive: true,
+    },
+  );
+
+  await fs.copy(
+    CONTRACT_SOURCE,
+    path.join(targetProvider.targetDir, "contracts"),
+    {
+      overwrite: true,
+      recursive: true,
+    },
+  );
+
+  await fs.copy(DOC_SOURCE, path.join(targetProvider.targetDir, "docs"), {
+    overwrite: true,
+    recursive: true,
+  });
 
   if (withInitMessage) {
     console.log(chalk.green("Six Eyes installed successfully."));

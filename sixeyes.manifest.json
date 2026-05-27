@@ -1,0 +1,21 @@
+{
+  "name": "@dev-isaacmello/six-eyes",
+  "displayName": "six-eyes",
+  "version": "1.2.2",
+  "architecture": {
+    "pillars": [
+      "cognitive-runtime",
+      "ai-protocol-system",
+      "architectural-governance",
+      "provider-adapters",
+      "semantic-persistence"
+    ]
+  },
+  "maps": {
+    "semantic": ".sixeyes/maps/semantic-map.json",
+    "dependencyGraph": ".sixeyes/graph/dependency-graph.json",
+    "contextWindow": ".sixeyes/runtime/context-window.json",
+    "architectureMemory": ".sixeyes/memory/architecture-memory.json"
+  },
+  "contracts": "contracts/*.schema.json"
+}

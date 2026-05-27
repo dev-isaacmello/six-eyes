@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://six-eyes.dev/contracts/provider.schema.json",
+  "title": "Six Eyes Provider",
+  "type": "object",
+  "required": ["name", "rules"],
+  "properties": {
+    "name": { "type": "string" },
+    "targetDir": { "type": "string" },
+    "rules": { "type": "array", "items": { "type": "string" } },
+    "templates": { "type": "array", "items": { "type": "string" } },
+    "prompts": { "type": "array", "items": { "type": "string" } }
+  }
+}

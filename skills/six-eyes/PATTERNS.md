@@ -61,3 +61,18 @@ Agents must:
 - isolate responsibilities
 - minimize overlapping context
 - synchronize architecture decisions
+- persist durable decisions to `.sixeyes/memory/decisions.json`
+- use `protocols/` for operating flow and `skills/` for applied expertise
+
+---
+
+# Six Eyes Map Usage
+
+Use maps as follows:
+
+- `runtime/context-window.json` answers "what should I read first?"
+- `maps/semantic-map.json` answers "what kind of system is this?"
+- `graph/dependency-graph.json` answers "what depends on what?"
+- `graph/hotspots.json` answers "where is change risk concentrated?"
+- `graph/violations.json` answers "what boundaries are already broken?"
+- `memory/architecture-memory.json` answers "what architecture should persist?"

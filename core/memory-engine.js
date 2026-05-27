@@ -1,112 +1,65 @@
 import path from "path";
 import fs from "fs-extra";
-import { MAP_FILES, STATE_DIRNAME } from "./constants.js";
-import { buildContextRankings } from "./context-engine.js";
+import { LEGACY_MAP_FILES, MAP_FILES, STATE_DIRNAME } from "./constants.js";
+import { readJsonFile } from "./shared/cache.js";
+import { getMapPath, getStateDir } from "./shared/paths.js";
+import { persistMemory } from "./memory-engine/persistMemory.js";
 
-function statePath(workspacePath) {
-  return path.join(workspacePath, STATE_DIRNAME);
+function legacyMapPath(workspacePath, mapName) {
+  return path.join(getStateDir(workspacePath), LEGACY_MAP_FILES[mapName]);
 }
 
-function mapPath(workspacePath, mapName) {
-  return path.join(statePath(workspacePath), mapName);
-}
-
-async function writeJson(filePath, data) {
-  await fs.outputJson(filePath, data, { spaces: 2 });
-}
-
-async function readJson(filePath, fallback = {}) {
-  if (!(await fs.pathExists(filePath))) {
-    return fallback;
+async function listFilesRecursive(dir, root = dir) {
+  if (!(await fs.pathExists(dir))) {
+    return [];
   }
 
-  return fs.readJson(filePath);
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const files = [];
+
+  for (const entry of entries) {
+    const absolute = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await listFilesRecursive(absolute, root)));
+      continue;
+    }
+
+    files.push(path.relative(root, absolute).replaceAll("\\", "/"));
+  }
+
+  return files;
 }
 
 export async function ensureStateDirectory(workspacePath) {
-  await fs.ensureDir(statePath(workspacePath));
+  await fs.ensureDir(path.join(workspacePath, STATE_DIRNAME));
 }
 
 export async function persistAnalysisMaps(workspacePath, analysis) {
   await ensureStateDirectory(workspacePath);
-
-  const architectureMap = {
-    generatedAt: analysis.generatedAt,
-    detected: analysis.architecture.detected,
-    layers: analysis.architecture.layers,
-  };
-
-  const dependencyMap = {
-    generatedAt: analysis.generatedAt,
-    graph: analysis.dependency.graph,
-    cycles: analysis.dependency.cycles,
-    hotspots: analysis.dependency.hotspots,
-    layerViolations: analysis.dependency.layerViolations,
-    metrics: analysis.dependency.metrics,
-  };
-
-  const semanticMap = {
-    generatedAt: analysis.generatedAt,
-    frameworks: analysis.frameworks.detected,
-    guidance: analysis.summary.guidance,
-    cognitionScore: analysis.summary.cognitionScore,
-  };
-
-  const domainMap = {
-    generatedAt: analysis.generatedAt,
-    boundaries: analysis.domain.boundaries,
-  };
-
-  const contextRankings = {
-    generatedAt: analysis.generatedAt,
-    rankings: buildContextRankings(analysis),
-  };
-
-  const agentMemory = {
-    generatedAt: analysis.generatedAt,
-    planner: {
-      architecture: architectureMap.detected,
-      dependencyRisks:
-        dependencyMap.cycles.length + dependencyMap.layerViolations.length,
-    },
-    reviewer: {
-      hotspots: dependencyMap.hotspots.slice(0, 10),
-      guidance: semanticMap.guidance,
-    },
-    security: {
-      guidance: semanticMap.guidance.filter((g) =>
-        g.toLowerCase().includes("auth"),
-      ),
-    },
-  };
-
-  await Promise.all([
-    writeJson(mapPath(workspacePath, MAP_FILES.architecture), architectureMap),
-    writeJson(mapPath(workspacePath, MAP_FILES.dependencyGraph), dependencyMap),
-    writeJson(mapPath(workspacePath, MAP_FILES.semantic), semanticMap),
-    writeJson(mapPath(workspacePath, MAP_FILES.domain), domainMap),
-    writeJson(
-      mapPath(workspacePath, MAP_FILES.contextRankings),
-      contextRankings,
-    ),
-    writeJson(mapPath(workspacePath, MAP_FILES.agentMemory), agentMemory),
-    writeJson(mapPath(workspacePath, MAP_FILES.indexState), {
-      generatedAt: analysis.generatedAt,
-      fileStamp: analysis.scan.nextStamp,
-    }),
-  ]);
+  await persistMemory(workspacePath, analysis);
 }
 
 export async function readStoredMaps(workspacePath) {
   await ensureStateDirectory(workspacePath);
-  const files = await fs.readdir(statePath(workspacePath));
-  return files.sort();
+  return (await listFilesRecursive(getStateDir(workspacePath))).sort();
 }
 
 export async function readIndexState(workspacePath) {
   await ensureStateDirectory(workspacePath);
-  return readJson(mapPath(workspacePath, MAP_FILES.indexState), {
+
+  const indexState = await readJsonFile(getMapPath(workspacePath, "indexState"), null);
+  if (indexState) {
+    return indexState;
+  }
+
+  return readJsonFile(legacyMapPath(workspacePath, "indexState"), {
     generatedAt: null,
     fileStamp: {},
   });
 }
+
+export { compressMemory } from "./memory-engine/compressMemory.js";
+export { loadMemory } from "./memory-engine/loadMemory.js";
+export { persistMemory } from "./memory-engine/persistMemory.js";
+export { updateMemory } from "./memory-engine/updateMemory.js";
+export { MAP_FILES };

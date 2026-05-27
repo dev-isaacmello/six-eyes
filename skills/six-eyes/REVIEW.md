@@ -17,3 +17,5 @@ Always explain:
 - production impact
 - maintainability impact
 - scaling implications
+- verification gap
+- exact map or file evidence used

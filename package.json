@@ -1,6 +1,6 @@
 {
-  "name": "six-eyes",
-  "version": "1.1.2",
+  "name": "@dev-isaacmello/six-eyes",
+  "version": "1.2.2",
   "description": "Runtime-aware cognitive constraint shaping for AI coding agents",
   "type": "module",
   "bin": {
@@ -15,25 +15,49 @@
     "graph": "node bin/six-eyes.js graph",
     "review": "node bin/six-eyes.js review",
     "context": "node bin/six-eyes.js context",
+    "enforce": "node bin/six-eyes.js enforce",
     "maps": "node bin/six-eyes.js maps",
+    "protocols": "node bin/six-eyes.js protocols",
+    "skills": "node bin/six-eyes.js skills",
+    "test": "node --test \"tests/**/*.test.js\"",
     "publish:npm": "npm publish --access public"
   },
   "files": [
+    "assets",
     "bin",
+    "contracts",
     "core",
+    "docs",
+    "examples",
     "providers",
+    "protocols",
     "skills",
     "templates",
+    "AI.md",
+    "ARCHITECTURE.md",
+    "BOUNDARIES.md",
     "install.js",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "sixeyes.manifest.json",
+    "tsconfig.json"
   ],
   "engines": {
     "node": ">=18.18.0"
   },
   "exports": {
     ".": "./install.js",
-    "./core/*": "./core/*.js"
+    "./core/*": "./core/*.js",
+    "./core/scanner/*": "./core/scanner/*.js",
+    "./core/semantic-engine/*": "./core/semantic-engine/*.js",
+    "./core/dependency-engine/*": "./core/dependency-engine/*.js",
+    "./core/context-engine/*": "./core/context-engine/*.js",
+    "./core/enforce-engine/*": "./core/enforce-engine/*.js",
+    "./core/memory-engine/*": "./core/memory-engine/*.js",
+    "./core/snapshot-engine/*": "./core/snapshot-engine/*.js",
+    "./core/protocol-engine/*": "./core/protocol-engine/*.js",
+    "./core/provider-runtime/*": "./core/provider-runtime/*.js",
+    "./core/shared/*": "./core/shared/*.js"
   },
   "keywords": [
     "claude-code",

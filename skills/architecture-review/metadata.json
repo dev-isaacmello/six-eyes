@@ -1,0 +1,7 @@
+{
+  "id": "architecture-review",
+  "name": "Architecture Review",
+  "type": "skill",
+  "appliesTo": ["review", "refactor"],
+  "requires": ["semantic-map", "dependency-graph"]
+}

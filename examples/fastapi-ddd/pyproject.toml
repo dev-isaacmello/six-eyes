@@ -1,0 +1,4 @@
+[project]
+name = "six-eyes-fastapi-ddd-example"
+version = "0.0.0"
+dependencies = ["fastapi", "uvicorn"]

@@ -1,0 +1,7 @@
+{
+  "id": "spec-driven",
+  "name": "Spec Driven",
+  "type": "skill",
+  "appliesTo": ["implementation", "migration"],
+  "requires": ["context-window"]
+}

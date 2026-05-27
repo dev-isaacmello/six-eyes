@@ -1,0 +1,7 @@
+{
+  "id": "safe-refactor",
+  "name": "Safe Refactor",
+  "type": "skill",
+  "appliesTo": ["refactor", "migration"],
+  "requires": ["snapshot", "dependency-graph", "context-window"]
+}

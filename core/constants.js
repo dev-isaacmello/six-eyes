@@ -1,6 +1,25 @@
 export const STATE_DIRNAME = ".sixeyes";
 
 export const MAP_FILES = {
+  architecture: "memory/architecture-memory.json",
+  architectureMemory: "memory/architecture-memory.json",
+  dependencyGraph: "graph/dependency-graph.json",
+  semantic: "maps/semantic-map.json",
+  domain: "maps/domain-map.json",
+  symbol: "maps/symbol-map.json",
+  hotspots: "graph/hotspots.json",
+  violations: "graph/violations.json",
+  contextRankings: "runtime/context-window.json",
+  contextWindow: "runtime/context-window.json",
+  agentMemory: "memory/project-memory.json",
+  projectMemory: "memory/project-memory.json",
+  decisions: "memory/decisions.json",
+  activeProvider: "runtime/active-provider.json",
+  session: "runtime/session.json",
+  indexState: "runtime/index-state.json",
+};
+
+export const LEGACY_MAP_FILES = {
   architecture: "architecture.json",
   dependencyGraph: "dependency-graph.json",
   semantic: "semantic-map.json",
@@ -36,6 +55,7 @@ export const DEFAULT_IGNORES = [
   "**/.venv/**",
   "**/venv/**",
   "**/target/**",
+  "**/examples/**",
   "**/bin/**",
   "**/obj/**",
 ];

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://six-eyes.dev/contracts/architecture.schema.json",
+  "title": "Six Eyes Architecture Memory",
+  "type": "object",
+  "required": ["generatedAt", "detected", "layers"],
+  "properties": {
+    "generatedAt": { "type": "string" },
+    "detected": { "type": "array" },
+    "layers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "entrypoints": { "type": "array", "items": { "type": "string" } }
+  }
+}

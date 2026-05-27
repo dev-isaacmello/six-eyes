@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://six-eyes.dev/contracts/semantic-map.schema.json",
+  "title": "Six Eyes Semantic Map",
+  "type": "object",
+  "required": ["generatedAt", "frameworks", "guidance", "cognitionScore"],
+  "properties": {
+    "generatedAt": { "type": "string" },
+    "frameworks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "confidence"],
+        "properties": {
+          "name": { "type": "string" },
+          "confidence": { "type": "number" },
+          "evidence": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "architecture": { "type": "array" },
+    "entrypoints": { "type": "array", "items": { "type": "string" } },
+    "guidance": { "type": "array", "items": { "type": "string" } },
+    "cognitionScore": { "type": "number" }
+  }
+}

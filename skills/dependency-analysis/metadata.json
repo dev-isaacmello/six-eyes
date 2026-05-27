@@ -1,0 +1,7 @@
+{
+  "id": "dependency-analysis",
+  "name": "Dependency Analysis",
+  "type": "skill",
+  "appliesTo": ["review", "refactor", "debugging"],
+  "requires": ["dependency-graph"]
+}

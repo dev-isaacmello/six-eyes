@@ -1,0 +1,10 @@
+{
+  "name": "six-eyes-nextjs-monorepo-example",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

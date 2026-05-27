@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://six-eyes.dev/contracts/protocol.schema.json",
+  "title": "Six Eyes Protocol",
+  "type": "object",
+  "required": ["id", "steps"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "action"],
+        "properties": {
+          "name": { "type": "string" },
+          "action": { "type": "string" }
+        }
+      }
+    }
+  }
+}

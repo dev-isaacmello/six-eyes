@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://six-eyes.dev/contracts/context-window.schema.json",
+  "title": "Six Eyes Context Window",
+  "type": "object",
+  "required": ["generatedAt", "cognitionScore", "files", "guidance"],
+  "properties": {
+    "generatedAt": { "type": "string" },
+    "cognitionScore": { "type": "number" },
+    "frameworks": { "type": "array" },
+    "architectures": { "type": "array" },
+    "risks": { "type": "object" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file", "score"],
+        "properties": {
+          "file": { "type": "string" },
+          "score": { "type": "number" }
+        }
+      }
+    },
+    "guidance": { "type": "array", "items": { "type": "string" } },
+    "rankings": { "type": "array" }
+  }
+}

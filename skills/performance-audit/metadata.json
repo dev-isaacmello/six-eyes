@@ -1,0 +1,7 @@
+{
+  "id": "performance-audit",
+  "name": "Performance Audit",
+  "type": "skill",
+  "appliesTo": ["review", "debugging"],
+  "requires": ["dependency-graph", "context-window"]
+}

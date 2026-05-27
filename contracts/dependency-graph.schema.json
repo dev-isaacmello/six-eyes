@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://six-eyes.dev/contracts/dependency-graph.schema.json",
+  "title": "Six Eyes Dependency Graph",
+  "type": "object",
+  "required": ["generatedAt", "graph", "cycles", "hotspots", "layerViolations"],
+  "properties": {
+    "generatedAt": { "type": "string" },
+    "graph": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      }
+    },
+    "cycles": {
+      "type": "array",
+      "items": { "type": "array", "items": { "type": "string" } }
+    },
+    "hotspots": { "type": "array" },
+    "layerViolations": { "type": "array" },
+    "metrics": { "type": "object" }
+  }
+}

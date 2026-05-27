@@ -17,9 +17,10 @@ Primary objective:
 
 Before meaningful code changes:
 
-1. inspect `.sixeyes/architecture.json`
-2. inspect `.sixeyes/dependency-graph.json`
-3. inspect `.sixeyes/context-rankings.json`
+1. inspect `.sixeyes/runtime/context-window.json`
+2. inspect `.sixeyes/memory/architecture-memory.json`
+3. inspect `.sixeyes/graph/dependency-graph.json`
+4. inspect `.sixeyes/graph/violations.json`
 
 If maps are missing or stale, run `six-eyes review`.
 
@@ -66,6 +67,7 @@ Always return:
 - impacted files/layers
 - architecture trade-offs
 - rollback or mitigation strategy when risk is medium/high
+- verification command or reason verification was not available
 
 Never return:
 
