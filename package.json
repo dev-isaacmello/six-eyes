@@ -6,6 +6,14 @@
   "bin": {
     "six-eyes": "./bin/six-eyes.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dev-isaacmello/six-eyes"
+  },
+  "homepage": "https://github.com/dev-isaacmello/six-eyes#readme",
+  "bugs": {
+    "url": "https://github.com/dev-isaacmello/six-eyes/issues"
+  },
   "scripts": {
     "start": "node bin/six-eyes.js",
     "dev": "node bin/six-eyes.js review",
